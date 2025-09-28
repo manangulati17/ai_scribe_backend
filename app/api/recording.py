@@ -7,7 +7,7 @@ import asyncio
 import wave
 import os
 from datetime import datetime
-from typing import Optional, Dict, Any
+from typing import Optional, Dict, Any, List
 
 from app.services.audio_processor import AudioProcessor
 from app.services.speech_recognition import SpeechRecognitionService
@@ -810,8 +810,19 @@ async def create_session(
         title = session_data.get("title")
         patient_id = session_data.get("patient_id")
         
-        logger.info(f"Creating session - Title: {title}, Patient ID: {patient_id}, User ID: {current_user.id}")
-        logger.info(f"Session data received: {session_data}")
+        # logger.info(f"Creating session - Title: {title}, Patient ID: {patient_id}, User ID: {current_user.id}")
+        # logger.info(f"Session data received: {session_data}")
+        print("🎤 Backend.create_session - Creating session:")
+        print(f"   Title: {title}")
+        print(f"   Patient ID: {patient_id}")
+        print(f"   User ID: {current_user.id}")
+        print(f"   Full session data received: {session_data}")
+        
+        logger.info(f"🎤 Backend.create_session - Creating session:")
+        logger.info(f"   Title: {title}")
+        logger.info(f"   Patient ID: {patient_id}")
+        logger.info(f"   User ID: {current_user.id}")
+        logger.info(f"   Full session data received: {session_data}")
         
         if not title:
             raise HTTPException(status_code=400, detail="Session title is required")
@@ -844,9 +855,22 @@ async def create_session(
         db.add(new_session)
         db.commit()
         db.refresh(new_session)
+        print("✅ Backend.create_session - Session created successfully:")
+        print(f"   Session ID: {new_session.id}")
+        print(f"   Title: {new_session.title}")
+        print(f"   Patient ID: {new_session.patient_id}")
+        print(f"   Status: {new_session.status}")
+        print(f"   User ID: {new_session.user_id}")
         
-        logger.info(f"Created session: {new_session.id} for user: {current_user.id}")
-        logger.info(f"Session details - Title: {new_session.title}, Patient ID: {new_session.patient_id}, Status: {new_session.status}")
+        logger.info(f"✅ Backend.create_session - Session created successfully:")
+        logger.info(f"   Session ID: {new_session.id}")
+        logger.info(f"   Title: {new_session.title}")
+        logger.info(f"   Patient ID: {new_session.patient_id}")
+        logger.info(f"   Status: {new_session.status}")
+        logger.info(f"   User ID: {new_session.user_id}")
+        
+        # logger.info(f"Created session: {new_session.id} for user: {current_user.id}")
+        # logger.info(f"Session details - Title: {new_session.title}, Patient ID: {new_session.patient_id}, Status: {new_session.status}")
         
         return {
             "id": new_session.id,
