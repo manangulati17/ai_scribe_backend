@@ -1,14 +1,23 @@
-from pydantic import BaseModel, EmailStr
-from typing import Optional
+from pydantic import BaseModel, EmailStr, validator
+from typing import Optional, Union
 from datetime import datetime
 
 # User schemas
 class UserBase(BaseModel):
     email: EmailStr
     name: str
-    age: int
+    age: Union[int, str]
     gender: str
     number: str
+    
+    @validator('age', pre=True)
+    def convert_age_to_int(cls, v):
+        if isinstance(v, str):
+            try:
+                return int(v)
+            except ValueError:
+                raise ValueError('Age must be a valid integer')
+        return v
 
 class UserCreate(UserBase):
     password: str
@@ -36,9 +45,18 @@ class TokenData(BaseModel):
 # Patient schemas
 class PatientBase(BaseModel):
     name: str
-    age: int
+    age: Union[int, str]
     gender: str
     number: str
+    
+    @validator('age', pre=True)
+    def convert_age_to_int(cls, v):
+        if isinstance(v, str):
+            try:
+                return int(v)
+            except ValueError:
+                raise ValueError('Age must be a valid integer')
+        return v
 
 class PatientCreate(PatientBase):
     pass
